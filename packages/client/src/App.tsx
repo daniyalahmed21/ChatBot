@@ -10,7 +10,7 @@ function App() {
         .then((data) => setMessage(data.message));
     }, []),
     <div>
-      <h1>{message}</h1>
+      <h1 className='font-bold text-3xl'>{message}</h1>
     </div>
   )
 }

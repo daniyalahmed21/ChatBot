@@ -8,12 +8,16 @@
     "concurrently": "^9.2.1"
   },
   "scripts": {
-    "dev": "bun run index.ts"
+    "dev": "bun run index.ts",
+    "prettier": "prettier --write ."
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "prettier": "^3.6.2"
+  }
 }

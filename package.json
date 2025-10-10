@@ -21,6 +21,7 @@
         "packages/*"
     ],
     "dependencies": {
+        "@google/generative-ai": "^0.24.1",
         "prettier": "^3.6.2"
     }
 }

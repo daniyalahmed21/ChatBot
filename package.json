@@ -1,23 +1,26 @@
 {
-  "name": "generative-ai",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest",
-    "concurrently": "^9.2.1"
-  },
-  "scripts": {
-    "dev": "bun run index.ts",
-    "prettier": "prettier --write ."
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "dependencies": {
-    "prettier": "^3.6.2"
-  }
+    "name": "generative-ai",
+    "module": "index.ts",
+    "type": "module",
+    "private": true,
+    "devDependencies": {
+        "@types/bun": "latest",
+        "concurrently": "^9.2.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.2.3"
+    },
+    "scripts": {
+        "dev": "bun run index.ts",
+        "prettier": "prettier --write .",
+        "prepare": "husky"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "dependencies": {
+        "prettier": "^3.6.2"
+    }
 }

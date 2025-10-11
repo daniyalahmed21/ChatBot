@@ -2,6 +2,7 @@ import { GoogleGenerativeAI, type Content } from '@google/generative-ai';
 import dotenv from 'dotenv';
 import express from 'express';
 import type { Request, Response } from 'express';
+import z from 'zod';
 dotenv.config();
 
 const app = express();
@@ -15,15 +16,19 @@ const conversations = new Map<string, Content[]>();
 
 const modelName = 'gemini-2.5-flash';
 
+const chatRequestSchema = z.object({
+    prompt: z.string().min(1, 'Prompt is required'),
+    conversationId: z.string().min(1, 'conversationId is required').uuid(),
+});
+
 app.post('/api/chat', async (req: Request, res: Response) => {
     try {
-        const { prompt, conversationId } = req.body || {};
-
-        if (!prompt || !conversationId) {
-            return res
-                .status(400)
-                .json({ error: 'Prompt and conversationId are required' });
+        const parseResult = chatRequestSchema.safeParse(req.body);
+        if (!parseResult.success) {
+            return res.status(400).json({ error: parseResult.error.format() });
         }
+
+        const { prompt, conversationId } = parseResult.data;
 
         // 1. Get current history or initialize a new one
         const history: Content[] = conversations.get(conversationId) || [];

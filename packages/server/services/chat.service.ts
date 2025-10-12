@@ -19,8 +19,8 @@ const chatService = {
         const modelInstance = client.getGenerativeModel({
             model: modelName,
             generationConfig: {
-                temperature: 0.2,
-                maxOutputTokens: 100,
+                temperature: 0.7,
+                maxOutputTokens: 2048, // Increased from 100
             },
         });
 
@@ -30,9 +30,18 @@ const chatService = {
 
         const aiResponseText = result.response.text();
 
+        console.log('AI Response:', aiResponseText);
+        console.log('Response length:', aiResponseText.length);
+
+        // Check if response is empty
+        if (!aiResponseText || aiResponseText.trim() === '') {
+            console.error('Empty response from Gemini API');
+            throw new Error('Received empty response from AI');
+        }
+
         history.push({
             role: 'model',
-            parts: [{ text: result.response.text() }],
+            parts: [{ text: aiResponseText }],
         });
 
         conversationRepository.save(conversationId, history);

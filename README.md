@@ -1,15 +1,31 @@
-# genai
+# AI ChatBot
 
-To install dependencies:
+A modern, real-time chat application powered by Google's Gemini AI with conversation history management.
 
-```bash
-bun install
-```
+## Features
 
-To run:
+- 💬 Real-time AI chat interface
+- 🔄 Conversation history persistence
+- ⚡ Smooth typing animations
+- 📱 Responsive design
+- 🎨 Clean, modern UI with hidden scrollbars
+- ⌨️ Keyboard shortcuts (Enter to send, Shift+Enter for new line)
 
-```bash
-bun run index.ts
-```
+## Tech Stack
 
-This project was created using `bun init` in bun v1.2.23. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+**Frontend:**
+
+- React with TypeScript
+- React Hook Form for form management
+- Axios for API calls
+- React Markdown for message rendering
+- Tailwind CSS for styling
+
+**Backend:**
+
+- Express.js
+- Google Generative AI (Gemini)
+- Zod for validation
+- TypeScript
+
+![alt text](image.png)

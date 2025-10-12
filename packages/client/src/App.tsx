@@ -1,9 +1,9 @@
 import './App.css';
-import ChatBot from './components/chatBot';
+import ChatBot from './components/ChatBot';
 
 function App() {
     return (
-        <div className="p-3">
+        <div>
             <ChatBot />
         </div>
     );

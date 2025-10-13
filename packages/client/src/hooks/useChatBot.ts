@@ -1,6 +1,13 @@
 import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import PopAudio from '@/assets/sounds/pop.mp3';
+import NotificationAudio from '@/assets/sounds/notification.mp3';
+
+const popAudio = new Audio(PopAudio);
+const notificationAudio = new Audio(NotificationAudio);
+popAudio.volume = 0.2;
+notificationAudio.volume = 0.2;
 
 type FormData = {
     prompt: string;
@@ -22,7 +29,7 @@ export const useChatBot = () => {
         setIsBotTyping(true);
         setMessages((prev) => [...prev, { text: prompt, type: 'user' }]);
         reset();
-
+        popAudio.play().catch((e) => console.log('Pop sound error:', e));
         try {
             const { data } = await axios.post('/api/chat', {
                 prompt,
@@ -34,6 +41,9 @@ export const useChatBot = () => {
                     ...prev,
                     { text: data.message, type: 'model' },
                 ]);
+                notificationAudio
+                    .play()
+                    .catch((e) => console.log('Notification sound error:', e));
             } else {
                 setMessages((prev) => [
                     ...prev,

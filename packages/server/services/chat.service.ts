@@ -1,7 +1,16 @@
 import { GoogleGenerativeAI, type Content } from '@google/generative-ai';
 import conversationRepository from '../repositories/conversation.repository';
+import fs from 'fs';
+import path from 'path';
+import template from '../prompts/prompt.txt';
 
 const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+const parkInfo = fs.readFileSync(
+    path.join(__dirname, '..', 'prompts', 'parkInfo.md'),
+    'utf-8'
+);
+const instructions = template.replace('{{parkInfo}}', parkInfo);
 
 const chatService = {
     getChatResponse: async (
@@ -17,6 +26,7 @@ const chatService = {
         });
 
         const modelInstance = client.getGenerativeModel({
+            systemInstruction: instructions,
             model: modelName,
             generationConfig: {
                 temperature: 0.7,

@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../lib/prisma';
+import { reviewService } from '../services/review.service';
 
-export const productController = {
-    GetProductReviews: async (req: Request, res: Response) => {
+export const reviewController = {
+    getReviews: async (req: Request, res: Response) => {
         const { id } = req.params;
         if (!id) {
             return res.status(400).json({ error: 'Product ID is required' });
@@ -12,10 +13,9 @@ export const productController = {
                 .status(400)
                 .json({ error: 'Product ID must be a number' });
         }
-        const reviews = await prisma.review.findMany({
-            where: { productId: Number(id) },
-            orderBy: { createdAt: 'desc' },
-        });
+
+        const reviews = await reviewService.getReviewsByProductId(Number(id));
+
         res.json({ reviews });
     },
 };

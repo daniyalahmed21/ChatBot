@@ -4,9 +4,8 @@ import type { GetReviewsResponse } from './reviewTypes';
 export const fetchReviews = async (
     productId: number
 ): Promise<GetReviewsResponse> => {
-    const response = await fetch(`/api/products/${productId}/reviews`);
-    if (!response.ok) throw new Error('Failed to fetch reviews');
-    return response.json();
+    const response = await axios(`/api/products/${productId}/reviews`);
+    return response.data;
 };
 
 export const generateSummary = async (productId: number): Promise<string> => {

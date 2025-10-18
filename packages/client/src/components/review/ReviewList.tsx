@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Button } from '../ui/button';
 import { renderStars } from './Stars';
@@ -11,21 +11,25 @@ import { fetchReviews, generateSummary } from '@/lib/reviewService';
 export const ReviewList = ({ productId }: Props) => {
     const [summary, setSummary] = useState<string | null>(null);
 
+    // ✅ Fetch reviews
     const { data, isLoading, isError } = useQuery({
         queryKey: ['reviews', productId],
         queryFn: () => fetchReviews(productId),
-        staleTime: 1000 * 60 * 2, // cache for 2 min
+        staleTime: 1000 * 60 * 2,
         retry: 1,
     });
 
-    const handleGenerateSummary = async () => {
-        try {
-            const result = await generateSummary(productId);
-            setSummary(result);
-        } catch (err) {
-            console.error('Error generating summary:', err);
-        }
-    };
+    // ✅ Create mutation for summary generation (defined outside event handler)
+    const { mutate: handleSummarize, isPending: isSummaryLoading } =
+        useMutation({
+            mutationFn: () => generateSummary(productId),
+            onSuccess: (result) => {
+                setSummary(result);
+            },
+            onError: (error) => {
+                console.error('Error generating summary:', error);
+            },
+        });
 
     if (isError) {
         return (
@@ -62,9 +66,10 @@ export const ReviewList = ({ productId }: Props) => {
                         <Button
                             variant="outline"
                             className="mb-4"
-                            onClick={handleGenerateSummary}
+                            onClick={() => handleSummarize()}
+                            disabled={isSummaryLoading}
                         >
-                            Summarize
+                            {isSummaryLoading ? 'Summarizing...' : 'Summarize'}
                         </Button>
                     )}
 

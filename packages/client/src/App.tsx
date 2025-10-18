@@ -5,7 +5,7 @@ import { ReviewList } from './components/review/reviewList';
 function App() {
     return (
         <div>
-            <ReviewList productId={5} />
+            <ReviewList productId={1} />
         </div>
     );
 }

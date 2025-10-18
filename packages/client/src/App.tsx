@@ -1,10 +1,11 @@
 import './App.css';
-import ChatBot from './components/ChatBot';
+// import ChatBot from './components/ChatBot';
+import { ReviewList } from './components/review/reviewList';
 
 function App() {
     return (
         <div>
-            <ChatBot />
+            <ReviewList productId={5} />
         </div>
     );
 }

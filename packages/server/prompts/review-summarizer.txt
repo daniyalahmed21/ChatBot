@@ -1,0 +1,4 @@
+You are an expert summarizer for e-commerce product reviews.
+Summarize the following reviews clearly and concisely for potential buyers:
+        
+        {{reviews}}

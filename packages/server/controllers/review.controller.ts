@@ -1,45 +1,45 @@
 import type { Request, Response } from 'express';
-import { prisma } from '../lib/prisma';
 import { reviewService } from '../services/review.service';
 
 export const reviewController = {
     getReviews: async (req: Request, res: Response) => {
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({ error: 'Product ID is required' });
-        }
-        if (isNaN(Number(id))) {
-            return res
-                .status(400)
-                .json({ error: 'Product ID must be a number' });
-        }
+        const productId = validateProductId(req, res);
+        if (productId === null) return;
 
-        const reviews = await reviewService.getReviewsByProductId(Number(id));
+        const [reviews, summary] = await Promise.all([
+            reviewService.getReviews(productId),
+            reviewService.getSummary(productId),
+        ]);
 
-        if (!reviews) {
-            return res.status(404).json({ error: 'Reviews not found' });
-        }
-
-        res.json({ reviews });
+        res.json({ reviews, summary });
     },
 
     getSummary: async (req: Request, res: Response) => {
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({ error: 'Product ID is required' });
-        }
-        if (isNaN(Number(id))) {
-            return res
-                .status(400)
-                .json({ error: 'Product ID must be a number' });
-        }
+        const productId = validateProductId(req, res);
+        if (productId === null) return;
 
-        const summary = await reviewService.summarizeReviews(Number(id));
-
-        if (!summary) {
-            return res.status(404).json({ error: 'Summary not found' });
-        }
-
+        const summary = await reviewService.generateSummary(productId);
         res.json({ summary });
     },
 };
+
+/**
+ * Utility function to validate product ID.
+ * Returns number if valid, otherwise sends a 400 response and returns null.
+ */
+function validateProductId(req: Request, res: Response): number | null {
+    const id = req.params.id;
+    const productId = Number(id);
+
+    if (!id) {
+        res.status(400).json({ error: 'Product ID is required' });
+        return null;
+    }
+
+    if (isNaN(productId) || productId <= 0) {
+        res.status(400).json({ error: 'Product ID must be a positive number' });
+        return null;
+    }
+
+    return productId;
+}
